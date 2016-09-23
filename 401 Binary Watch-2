@@ -1,0 +1,102 @@
+// write the combination function
+
+public class Solution {
+    public List<String> readBinaryWatch(int k) {
+        List<String> result = new ArrayList<>();
+        List<int[]> list = new ArrayList<>();
+        int m = 10;
+        list = combine(m, k);
+        for(int i = 0; i < list.size(); i++){
+            int[] a = list.get(i);
+            int hour = 0;
+            int minute = 0;
+            int temp = 1;
+            for(int j = 0; j < 4; j++){
+                hour += a[j] * temp;
+                temp *= 2;
+            }
+            if(hour > 11){
+                continue;
+            }
+            temp = 1;
+            for(int j = 4; j < m; j++){
+                minute += a[j] * temp;
+                temp *= 2;
+            }
+            if(minute > 59){
+                continue;
+            }
+            if(minute < 10){
+                result.add(hour + ":0" + minute);
+            }else{
+                result.add(hour + ":" + minute);
+            }
+
+        }
+        return result;
+    }
+    public List combine(int m, int n){
+        List<int[]> result = new ArrayList<>();
+        int[] a = new int[m];
+        int position = 0;
+        //int count = 0;
+        int test = 0;
+        for(int i = 0; i < n; i++){
+            a[i] = 1;
+        }
+        for(int i = n; i < m; i++){
+            a[i] = 0;
+        }
+        int[] c = new int[m];
+        for(int i = 0; i < c.length; i++){
+            c[i] = a[i];
+        }
+        result.add(c);
+        if(n == 0){
+            return result;
+        }
+        boolean flag = true;
+        while(flag){
+            for(int i = 0; i < m - 1; i++){
+                if(a[i] == 1 && a[i + 1] == 0){
+                    a[i] = 0;
+                    a[i + 1] = 1;
+                    position = i;
+                    break;
+                }
+            }
+
+            int count = 0;
+            for(int i = 0; i < position; i++){
+                if(a[i] == 1){
+                    count++;
+                }
+            }
+            for(int i = 0; i < position; i++){
+                if(i < count){
+                    a[i] = 1;
+                }else{
+                    a[i] = 0;
+                }
+            }
+            int[] b = new int[m];
+            for(int i = 0; i < b.length; i++){
+                b[i] = a[i];
+            }
+            //System.out.println(test++);
+            result.add(b);
+
+
+            for(int i = 0; i < n; i++){
+                if(a[m - 1 - i] == 0){
+                    break;
+                }
+                if(i == n - 1){
+                    flag = false;
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+}
